@@ -66,6 +66,8 @@ exports.userProfile = async (req, res) => {
             user: user
         })
     } catch (error) {
-
+        return res.status(500).json({
+            message: error
+        });
     }
 }
