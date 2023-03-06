@@ -15,11 +15,11 @@ exports.userSignUp = async (req, res) => {
 
         await user.save();
 
-        res.status(201).json({
+        return res.status(201).json({
             message: 'User has been created successfully.'
         });
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             message: error
         });
     }
@@ -45,14 +45,14 @@ exports.userSignIn = async (req, res) => {
                 expiresIn: "1h"
             });
 
-            res.status(200).json({
+            return res.status(200).json({
                 token,
-                expiresIn: 21600,
+                expiresIn: 3600,
                 user: user.email
             })
         }
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             message: error
         });
     }
@@ -60,7 +60,11 @@ exports.userSignIn = async (req, res) => {
 
 exports.userProfile = async (req, res) => {
     try {
+        const user = await User.findOne({ email: req.body.email }).exec();
 
+        res.status(200).json({
+            user: user
+        })
     } catch (error) {
 
     }
