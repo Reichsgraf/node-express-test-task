@@ -4,11 +4,16 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const sassMiddleware = require('node-sass-middleware');
+const mongoose = require('mongoose');
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 
 const app = express();
+
+mongoose.connect('mongodb://127.0.0.1:27017/myapp')
+    .then(() => console.log('connected to DB'))
+    .catch(() => console.log('connection failed'))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

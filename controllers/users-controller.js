@@ -13,21 +13,23 @@ exports.userSignUp = async (req, res) => {
             password: password
         });
 
-        await user.save();
+        const result = await user.save();
+
+        console.log(result);
 
         return res.status(201).json({
             message: 'User has been created successfully.'
         });
     } catch (error) {
         return res.status(500).json({
-            message: error
+            message: error.message
         });
     }
 };
 
 exports.userSignIn = async (req, res) => {
     try {
-        const user = await User.findOne({ email: req.body.email }).exec();
+        const user = await User.findOne({ email: req.body.email });
 
         if (!user) {
             return res.status(401).json({
@@ -41,7 +43,7 @@ exports.userSignIn = async (req, res) => {
             const token = jwt.sign({
                 email: user.email,
                 userId: user._id
-            }, process.env.JWT_KEY, {
+            }, 'key', {
                 expiresIn: "1h"
             });
 
@@ -53,21 +55,21 @@ exports.userSignIn = async (req, res) => {
         }
     } catch (error) {
         return res.status(500).json({
-            message: error
+            message: error.message
         });
     }
 }
 
 exports.userProfile = async (req, res) => {
     try {
-        const user = await User.findOne({ email: req.body.email }).exec();
+        const user = await User.findOne({ email: req.userData.email });
 
         res.status(200).json({
             user: user
         })
     } catch (error) {
         return res.status(500).json({
-            message: error
+            message: error.message
         });
     }
 }
