@@ -14,6 +14,13 @@ mongoose.connect('mongodb://127.0.0.1:27017/myapp')
     .then(() => console.log('connected to DB'))
     .catch(() => console.log('connection failed'))
 
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Token')
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS')
+  next();
+});
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'pug')
@@ -31,7 +38,7 @@ app.use(sassMiddleware({
 app.use(express.static(path.join(__dirname, 'public')))
 
 app.use('/', indexRouter)
-app.use('/users', usersRouter)
+app.use('/auth', usersRouter)
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -43,12 +50,12 @@ app.use((req, res, next) => {
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  res.locals.message = err.message
+  res.locals.error = req.app.get('env') === 'development' ? err : {}
 
   // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+  res.status(err.status || 500)
+  res.render('error')
+})
 
-module.exports = app;
+module.exports = app

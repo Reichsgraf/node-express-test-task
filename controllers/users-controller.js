@@ -9,15 +9,15 @@ exports.userSignUp = async (req, res) => {
 
         const user = new User({
             email: req.body.email,
-            name: req.body.name,
+            username: req.body.username,
             password: password
         });
 
-        await user.save()
+        await user.save();
 
-        return res.status(201).json({
+        res.status(201).json({
             message: 'User has been created successfully.'
-        })
+        });
     } catch (error) {
         return res.status(500).json({
             message: error.message
